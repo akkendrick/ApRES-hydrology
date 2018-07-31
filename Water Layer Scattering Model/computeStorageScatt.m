@@ -9,7 +9,7 @@ eps_w = 80;
 phi = 0.3;
 SMBrunoff = 0;
 T_sum_AWS = 0;
-sigma_w = 0.00016;
+sigma_w = 0.0003;
 %sigma_w = 0.00399;
 fc = 300*10^6; %Hz
 r = 0.04;
@@ -37,52 +37,52 @@ yReflector_deploy2 = yReflector - 38.4925;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot internal layer power  
-figure(9)
-hold on
-
-% Plot the internal layers coloring based on depth
-
-color1 = [239 243 255]/255;
-color2 = [8 81 156]/255;
-
-numcolors = length(yLoc_deploy1);
-% create the gradients
-clrmap = cell2mat(arrayfun(@(a,b)linspace(a,b,numcolors )',color1,color2,'uni',false));
-
-for j = 1:length(yLoc_deploy1)
-       
-    figure(9)
-    hold on
-
-    plot(t_deploy1, yReflector_deploy1(j,:), '.','Color',clrmap(j,:))
-    set(gca, 'FontSize',14)
-  
-end
-
-numcolors = length(yLoc_deploy2);
-% create the gradients
-clrmap = cell2mat(arrayfun(@(a,b)linspace(a,b,numcolors )',color1,color2,'uni',false));
-
-for j = 1:length(yLoc_deploy2)
-       
-    figure(9)
-    hold on
-    box
-    grid on
-    title('dB vs Time of Reflectors in the Y-Profile')
-    xlabel('Time')
-    ylabel('dB (Vms)')
-    plot(t_deploy2, yReflector_deploy2(j,:), '.','Color',clrmap(j,:))
-    ylim([-95,-35])
-  
-end
-
-plot(t_deploy1, meanRadarDat_deploy1,'.b','MarkerSize',10)
-plot(t_deploy2, meanRadarDat_deploy2,'.b','MarkerSize',10)
-
-alpha(0.5)
-ylim([-110,-35])
-xlim([datetime(2014,05,01),datetime(2014,12,01)])
+% figure(9)
+% hold on
+% 
+% % Plot the internal layers coloring based on depth
+% 
+% color1 = [239 243 255]/255;
+% color2 = [8 81 156]/255;
+% 
+% numcolors = length(yLoc_deploy1);
+% % create the gradients
+% clrmap = cell2mat(arrayfun(@(a,b)linspace(a,b,numcolors )',color1,color2,'uni',false));
+% 
+% for j = 1:length(yLoc_deploy1)
+%        
+%     figure(9)
+%     hold on
+% 
+%     plot(t_deploy1, yReflector_deploy1(j,:), '.','Color',clrmap(j,:))
+%     set(gca, 'FontSize',14)
+%   
+% end
+% 
+% numcolors = length(yLoc_deploy2);
+% % create the gradients
+% clrmap = cell2mat(arrayfun(@(a,b)linspace(a,b,numcolors )',color1,color2,'uni',false));
+% 
+% for j = 1:length(yLoc_deploy2)
+%        
+%     figure(9)
+%     hold on
+%     box
+%     grid on
+%     title('dB vs Time of Reflectors in the Y-Profile')
+%     xlabel('Time')
+%     ylabel('dB (Vms)')
+%     plot(t_deploy2, yReflector_deploy2(j,:), '.','Color',clrmap(j,:))
+%     ylim([-95,-35])
+%   
+% end
+% 
+% plot(t_deploy1, meanRadarDat_deploy1,'.b','MarkerSize',10)
+% plot(t_deploy2, meanRadarDat_deploy2,'.b','MarkerSize',10)
+% 
+% alpha(0.5)
+% ylim([-110,-35])
+% xlim([datetime(2014,05,01),datetime(2014,12,01)])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % First stitch together the data sets
@@ -174,8 +174,12 @@ end
 
 
 %Average runoff fraction
-disp('For phi of')
+disp('For phi and sigma of')
 phi
+sigma_w
+
+disp('For r of')
+r
 
 disp('Final water layer thickness')
 estimatedTotalMelt(end-1)
@@ -189,12 +193,34 @@ minColor = [40 235 200]/255;
 meanColor = [165 15 21]/255;
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load('RACMOMelt.mat')
+RACMO_ablation = cumulativeAccSMB;
+
+awsDaily = readtable('aws_daily.csv');
+dailyAWSDate = awsDaily{36:126,1};
+dailyAWSMelt = awsDaily{36:126,27};
+cumAWSMelt = awsDaily{36:126,28};
+
+meltAWS = zeros(length(dailyAWSDate)+1,1);
+totalAblationAWS = zeros(length(dailyAWSDate),1);
+for j=1:length(dailyAWSDate)
+    meltAWS(j) = dailyAWSMelt(j);
+    totalAblationAWS(j+1) = totalAblationAWS(j) + meltAWS(j);
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 figure(10)
 subplot(2,1,1)
 hold on
 box
 grid on
 plot(totalTimeVec,(estimatedTotalMelt(1:end-1)),'.')
+
+plot(dates,RACMO_ablation,'LineWidth',2)
+plot(dailyAWSDate, totalAblationAWS(1:end-1), 'LineWidth',2)
+
 title('Estimated stored melt')
 
 figure(10)

@@ -3,7 +3,7 @@ function [Qsca,L_mie] = computeMie(r,d,phi)
 
     f = 300*10^6;
 
-    % Looking up index of refractions at this wavelength (~100 cm) 
+    % Looking up index of refractions at center ApRES wavelength (~100 cm) 
     nwater = 8.847727 + 1.0i * 6.727E-02;
     nice = 1.7861 + 1.0i*3.348E-004;
     nvac = 1; 
