@@ -1,6 +1,15 @@
 function scattFrac = computeScattFrac(phi, runoff, sigma_w, r)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% Compute fraction of attenuation attributable to volumetric scattering
+%  
+%	Inputs
+%		phi - porosity of water storage
+%		runoff - runoff fraction
+%		sigma_w - electrical conductivity of water filled pores
+%		r - pore radius
+%
+%	Outputs
+%		scattFrac - fraction of attenuation attributable to volumetric scattering
+
 
 eps_i = 3.17;
 eps_w = 80;
