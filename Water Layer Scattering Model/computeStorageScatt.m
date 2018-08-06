@@ -2,7 +2,6 @@
 
 % Compute estimated attenuation curve
 startPower = -40.00; 
-eps_w = 80;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specify porosity for water/ice mixture

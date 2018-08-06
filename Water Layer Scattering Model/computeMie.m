@@ -1,6 +1,18 @@
 function [Qsca,L_mie] = computeMie(r,d,phi)
-% Compute mie scattering
+% Define needed parameters and call Mie scattering code
+%
+%   Inputs
+%       r - pore radius
+%       d - porous layer thickness 
+%       phi - porosity of porous layer
+%
+%   Outputs
+%       Qsca - scattering efficiency 
+%       L_mie - calculated scattering losses through porous layer
+%
+%
 
+    % Center frequency of ApRES
     f = 300*10^6;
 
     % Looking up index of refractions at center ApRES wavelength (~100 cm) 

@@ -1,6 +1,19 @@
- function [ iceAtten, sigma, T ] = waterIceMixReturn( T_water, fc, sigma_w,eps_w,eps_b,eps_i,phi,runoff)
-% Computes attenuation due to water/firn mix using a basic mixing model and
+ function [ iceAtten, sigma, T ] = waterIceMixReturn( T_water, fc, sigma_w,phi,runoff)
+% Computes attenuation due to water/ice mix using a basic mixing model and
 % attenuation through a conductor
+%
+%	Inputs
+%		T_water - water layer thickness
+%		fc - center frequency
+%		sigma_w - electrical conductivity of water
+%       phi - porosity of water/ice mix
+%       runoff - surface runoff fraction
+%
+%  Outputs
+%       iceAtten - modeled attenuation through water/ice mixture
+%       sigma - conductivity of water/ice mixture via mixing model
+%       T - thickness of water/ice mixture
+
 
 mu_o = 1.2566370614*10^(-6); %H/m;
 
@@ -10,7 +23,7 @@ end
 
 % Implement mixing model
 % So if water is of thickness T, we need
-T_water_iceMix = T_water/phi;% 
+T_water_iceMix = T_water/phi;%
 
 % Skin depth matches results in Dowdeswell and Evans 2010
 %s = 1.7;
@@ -19,7 +32,7 @@ T_water_iceMix = T_water/phi;%
 s = 1.67;
 %s = 1.00;
 
-% The water ice mixture (phi or v) is considered to be the thickness of the 
+% The water ice mixture (phi or v) is considered to be the thickness of the
 % conducting component
 sigma = sigma_w*(phi)^s; % S/m
 
@@ -43,4 +56,3 @@ end
 T = T_water_iceMix;
 
 end
-
