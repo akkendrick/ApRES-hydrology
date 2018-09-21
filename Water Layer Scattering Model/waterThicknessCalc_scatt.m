@@ -11,7 +11,6 @@ runoff = 0;
 scattFrac = computeScattFrac(phi,runoff,sigma_w,r);
 
 % Specify change in attenuation due to proposed water storage
-%deltaAtten = (65-28)*-1.0;
 deltaAtten = (80-28)*-1.0;
 
 % Compute water + porous layer thickness from specifed change in attenuation

@@ -1,16 +1,22 @@
 function [ T_water, T_water_iceMix ] = estimateMeltScatt(deltaAtten,scattFrac,fc, sigma_w,phi)
-% estimateMelt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% estimateMeltScatt
 % For a given observed change in attenuation estimate the amount of melt
 % water needed to produce this change
 %
+% Inputs:
 %   deltaAtten - change in attenuation
+%   scattFrac - proportion of the attenuation attributable to volume
+%       scattering
 %   fc - center frequency
 %   sigma_w - conductivity of water
 %   phi - porosity
-%   runoff - estimated runoff fraction
 %
-%   deltaMelt - amount of melt needed to produce attenuation change
-
+% Outputs:
+%   T_water - estimated thickness of stored water
+%   T_water_iceMix - estimated thickness of macroporous storage
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mu_o = 1.2566370614*10^(-6); %H/m;
 
 % Conductivity mixing model and mean value of s from Geldsetzer et al 2009

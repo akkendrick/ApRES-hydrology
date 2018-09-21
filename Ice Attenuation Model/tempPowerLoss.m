@@ -12,6 +12,8 @@
 %months = [1,3,5,7,9,11];
 %months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
+% Compute cumulative attenuation through top 50m over a timescale specified
+% by fraction of months
 months = 0:0.01:12;
 for j = 1:length(months)
     month = months(j);
@@ -48,6 +50,9 @@ nSteps = size(allAttenProfiles,1);
 colors = parula(13);
 %months = [1,3,5,7,9,11];
 
+% Plot the attenuation and temperature profiles through the top 50m of ice
+% for each time step
+% NOTE: this can take a long time depending on the number of timesteps
 for i = 1:nSteps
 
     colorInd = floor(months(i))+1;
@@ -86,6 +91,7 @@ end
 
 
 %%
+% Plot the cumulative attenuation as a function of time
 nSteps = size(allAttenProfiles,1);
 
 % Set specifically for: %months = 0:0.01:12;
@@ -104,11 +110,11 @@ legend('Real Params','Modified Params')
 
 
 % Compare to annual temp at weather station
-awsDaily = readtable('aws_daily.csv');
-date = awsDaily{1:211,1};
+load('AWS_tempData.mat')
+date = AWS_date;
 %date = cell2mat(date);
-temp1 = awsDaily{1:211,3};
-temp2 = awsDaily{1:211,4};
+temp1 = AWS_temp1;
+temp2 = AWS_temp2;
 
 t = datetime(date,'InputFormat','yyyy-MM-dd');
 %time2 = datetime(2014,1,1,1,1:438:525600,0);

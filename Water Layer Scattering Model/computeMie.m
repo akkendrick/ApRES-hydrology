@@ -10,6 +10,10 @@ function [Qsca,L_mie] = computeMie(r,d,phi)
 %       Qsca - scattering efficiency 
 %       L_mie - calculated scattering losses through porous layer
 %
+%   To download MATLAB Mie scattering code visit: 
+%       https://omlc.org/software/mie/
+%   Download "Maetzler's MATLAB code for Mie theory". 
+%   Place codes in current working directory or add to path.
 %
 
     % Center frequency of ApRES

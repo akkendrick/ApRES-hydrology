@@ -1,36 +1,38 @@
-% Estimate water storage from observed internal layer power drop
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%computeStorageScatt
+% Script to calculate the evolution of water storage over time by 
+% estimating water thickness from observed ApRES attenuation 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute estimated attenuation curve
 startPower = -40.00; 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Specify porosity for water/ice mixture
+% Specify porosity for water/ice mixture, water conductivity, and pore size
 phi = 0.3;
 SMBrunoff = 0;
 T_sum_AWS = 0;
-sigma_w = 0.0003;
+sigma_w = 0.00016;
 %sigma_w = 0.00399;
 fc = 300*10^6; %Hz
 r = 0.04;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 % Load internal layers
-load('radarData_deploy1_reprocess.mat')
+load('internalLayer_radarData_deploy1.mat')
 meanRadarDat_deploy1 = meanRadarDat;
 t_deploy1 = t;
 yReflector_deploy1 = yReflector;
 xLoc_deploy1 = xLoc;
 yLoc_deploy1 = yLoc;
 
-load('radarData_deploy2_reprocess.mat')
+load('internalLayer_radarData_deploy2.mat')
 meanRadarDat_deploy2 = meanRadarDat;
 t_deploy2 = t(:,1);
 yReflector_deploy2 = yReflector;
 xLoc_deploy2 = xLoc;
 yLoc_deploy2 = yLoc;
 
-% Now scale deployment2 to match modelled data
+% Apply determined constant offset correction to deployment2
 meanRadarDat_deploy2 = meanRadarDat_deploy2 - 38.4925;
 yReflector_deploy2 = yReflector - 38.4925;
 
@@ -145,8 +147,11 @@ estimatedTotalMelt = zeros(length(totalTimeVec)+1,1);
 predictedMelt = zeros(length(totalTimeVec)+1,1);
 estimatedFirnThickness = zeros(length(totalTimeVec)+1,1);
 
+% Compute scattering fraction
 scattFrac = computeScattFrac(phi, SMBrunoff, sigma_w, r);
 
+% Loop over timevector, compute the ApRES attenuation for each step,
+% and estimate the corresponding amount of water storage
 powerDiffVec = zeros(length(totalTimeVec),1);
 for a = 1:length(totalTimeVec)
 
@@ -160,7 +165,6 @@ for a = 1:length(totalTimeVec)
     powerDiffVec(a) = powerDiff;
     
 
-    % Find the scattering fraction closest to the observed powerDiff
     [T_water, T_water_iceMix] = estimateMeltScatt(powerDiff,scattFrac,fc,sigma_w,phi);
     T_water = -1.0*T_water;
     T_water_iceMix = -1.0*T_water_iceMix;
@@ -173,12 +177,13 @@ end
 
 
 %Average runoff fraction
-disp('For phi and sigma of')
-phi
-sigma_w
+text = 'For phi, %0.5f and sigma of, %0.5f';
+str = sprintf(text,phi,sigma_w);
+disp(str)
 
-disp('For r of')
-r
+text = 'And for r of, %0.5f';
+str = sprintf(text,r);
+disp(str)
 
 disp('Final water layer thickness')
 estimatedTotalMelt(end-1)
@@ -193,9 +198,6 @@ meanColor = [165 15 21]/255;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load('RACMOMelt.mat')
-RACMO_ablation = cumulativeAccSMB;
-
 awsDaily = readtable('aws_daily.csv');
 dailyAWSDate = awsDaily{36:126,1};
 dailyAWSMelt = awsDaily{36:126,27};
@@ -216,8 +218,6 @@ hold on
 box
 grid on
 plot(totalTimeVec,(estimatedTotalMelt(1:end-1)),'.')
-
-plot(dates,RACMO_ablation,'LineWidth',2)
 plot(dailyAWSDate, totalAblationAWS(1:end-1), 'LineWidth',2)
 
 title('Estimated stored melt')
@@ -231,4 +231,4 @@ plot(totalTimeVec, estimatedFirnThickness(1:end-1),'.');
 title('Estimated firn thickness')
 xlim([datetime('May 1, 2014'),datetime('Nov 30, 2014')])
 
-save('predictedMelt.mat','totalTimeVec', 'estimatedTotalMelt','predictedMelt')
+%save('predictedMelt.mat','totalTimeVec', 'estimatedTotalMelt','predictedMelt')

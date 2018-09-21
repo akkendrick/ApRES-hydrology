@@ -1,6 +1,7 @@
  function [ iceAtten, sigma, T ] = waterIceMixReturn( T_water, fc, sigma_w,phi,runoff)
-% Computes attenuation due to water/ice mix using a basic mixing model and
-% attenuation through a conductor
+% Computes attenuation due to water/ice mix using a mixing model and
+% attenuation through a conductor. See Geldsetzer et al 2009 for mixing
+% model.
 %
 %	Inputs
 %		T_water - water layer thickness
@@ -26,11 +27,8 @@ end
 T_water_iceMix = T_water/phi;%
 
 % Skin depth matches results in Dowdeswell and Evans 2010
-%s = 1.7;
-
 % Conductivity mixing model and mean value of s from Geldsetzer et al 2009
 s = 1.67;
-%s = 1.00;
 
 % The water ice mixture (phi or v) is considered to be the thickness of the
 % conducting component
