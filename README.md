@@ -28,6 +28,7 @@
 1. Fork or download repository
 2. Visit https://omlc.org/software/mie/ 
 3. Download "Maetzler's MATLAB code for Mie theory" 
+4. Modify getMieScatter.m to return the scattering efficiency, qsca, as the fourth element of musgp (i.e. change line 58 from musgp= real([mus g musp]); to musgp= real([mus g musp qsca]);
 4. Place Mie scattering code in current working directory or add to your MATLAB's path
 
 
