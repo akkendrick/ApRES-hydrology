@@ -33,4 +33,11 @@
 
 <em> Mie scattering code required to estimate water storage and forward model radar attenuation </em>
 
+<b> Optical Constant Data for changing frequency in volume scattering code <b>
+  
+  https://mospace.umsystem.edu/xmlui/handle/10355/11599
+  https://atmos.washington.edu/ice_optical_constants/
+  
+ See also: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2007JD009744
+
 <a href="https://zenodo.org/badge/latestdoi/142612630"><img src="https://zenodo.org/badge/142612630.svg" alt="DOI"></a>
